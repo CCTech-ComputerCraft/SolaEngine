@@ -7,7 +7,7 @@ running = true
 components = {}
 
 dir = Config.CurrentProject
-CurrentDir = dir
+CcrrentDir = dir
 
 _ms = 0
 
@@ -44,7 +44,7 @@ function printComponents()
   term.setTextColor(colors.black)
   term.setBackgroundColor(colors.lightGray)
 
-  for _, file in ipairs(fs.list(CurrentDir)) do
+  for _, file in ipairs(fs.list(currentDir)) do
     xPos, yPos = term.getCursorPos()
     posX = tonumber(xPos)
     posY = tonumber(yPos)
@@ -89,15 +89,15 @@ function menu(type)
 
   else
     if type == "Node" then
-      fs.makeDir(CurrentDir.."/"..input)
+      fs.makeDir(currentDir.."/"..input)
     elseif type == "Script" then
-      file = fs.open(CurrentDir.."/"..input..".script", "w")
+      file = fs.open(currentDir.."/"..input..".script", "w")
       file.write(" ")
       file.close()
     elseif type == "Delete" then
-      fs.delete(CurrentDir.."/"..input)
+      fs.delete(currentDir.."/"..input)
     elseif type == "Sprite" then
-      shell.run("paint "..CurrentDir.."/"..input..".sprite", "w")
+      shell.run("paint "..currentDir.."/"..input..".sprite", "w")
     end
     reDraw()
     _ms = 0
@@ -123,15 +123,19 @@ function runtime()
       term.setCursorPos(1,2)
       input = read()
 
-      if fs.exists(input) then
-        if string.find(input, "%.script") then
-          shell.run("edit "..CurrentDir.."/"..input)
+
+      local function ends_with(str, ending)
+        return ending == "" or str:sub(-#ending) == ending
+      end
+      if fs.exists(currentDir.."/"..input) then
+        if ends_with(input, ".script") then
+          shell.run("edit "..currentDir.."/"..input)
           reDraw()
-        elseif string.find(input, "%.sprite") then
-          shell.run("paint "..CurrentDir.."/"..input)
+        elseif ends_with(input, ".sprite") then
+          shell.run("paint "..currentDir.."/"..input)
           reDraw()
         else
-          CurrentDir = CurrentDir.."/"..input
+          currentDir = currentDir.."/"..input
           reDraw()
         end
       else
