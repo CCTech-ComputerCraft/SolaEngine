@@ -1,0 +1,115 @@
+PlayerCount = 0
+CurrentPlayer = {}
+PlayerWalking = false
+WalkSpeed = 1
+oldX = 0
+oldY = 0
+local playerKilled = false
+
+function setPos(x, y)
+  if playerKilled == false then
+    player = CurrentPlayer["Sprite"]
+    oldX = CurrentPlayer["XPos"]
+    oldY = CurrentPlayer["YPos"]
+    CurrentPlayer["XPos"] = x
+    CurrentPlayer["YPos"] = y
+    paintutils.drawImage(player, x, y)
+  end
+end
+
+function Movement()
+  if playerKilled == false then
+    player = CurrentPlayer["Sprite"]
+    x = CurrentPlayer["XPos"]
+    y = CurrentPlayer["YPos"]
+    paintutils.drawImage(player, x, y)
+  end
+end
+
+function control(up, left, down, right, allowUP, allowLeft, allowDown, allowRight)
+  local event, key = os.pullEvent("key")
+  if key == up then
+    if allowUP == true then
+      if playerKilled == false then
+        oldY = CurrentPlayer["YPos"]
+        oldX = CurrentPlayer["XPos"]
+        CurrentPlayer["YPos"] = CurrentPlayer["YPos"] - WalkSpeed
+      end
+    end
+  elseif key == down then
+    if allowDown == true then
+      if playerKilled == false then
+        oldY = CurrentPlayer["YPos"]
+        oldX = CurrentPlayer["XPos"]
+        CurrentPlayer["YPos"] = CurrentPlayer["YPos"] + WalkSpeed
+      end
+    end
+  elseif key == right then
+    if allowRight == true then
+      if playerKilled == false then
+        oldY = CurrentPlayer["YPos"]
+        oldX = CurrentPlayer["XPos"]
+        CurrentPlayer["XPos"] = CurrentPlayer["XPos"] + WalkSpeed
+      end
+    end
+
+  elseif key == left then
+    if allowLeft == true then
+      if playerKilled == false then
+        oldY = CurrentPlayer["YPos"]
+        oldX = CurrentPlayer["XPos"]
+        CurrentPlayer["XPos"] = CurrentPlayer["XPos"] - WalkSpeed
+      end
+    end
+  elseif key == game.exitKey then
+    game.exit()
+  end
+
+  for _, collision in ipairs(collisions.collisions) do
+    if collision.XPos == CurrentPlayer["XPos"] and collision.YPos == CurrentPlayer["YPos"] then
+      CurrentPlayer["XPos"] = oldX
+      CurrentPlayer["YPos"] = oldY
+    end
+  end
+
+end
+
+function spawn(player, x, y)
+  playerKilled = false
+  local plr = paintutils.loadImage(player)
+  paintutils.drawImage(plr, x, y)
+  PlayerCount = PlayerCount + 1
+  CurrentPlayer["Sprite"] = plr
+  CurrentPlayer["XPos"] = x
+  CurrentPlayer["YPos"] = y
+
+  if PlayerCount >= 2 then
+    error("Too many players!")
+  end
+end
+
+function kill()
+  playerKilled = true
+  PlayerCount = PlayerCount - 1
+  CurrentPlayer = {}
+end
+
+function setHealth(health)
+  CurrentPlayer["Health"] = health
+end
+
+function damage(points)
+  if CurrentPlayer["Health"] then
+    if CurrentPlayer["Health"] <= 0 then
+      kill()
+    else
+      CurrentPlayer["Health"] = CurrentPlayer["Health"] - points
+    end
+  end
+end
+
+function heal(points)
+  if not CurrentPlayer["Health"] == nil then
+    CurrentPlayer["Health"] = CurrentPlayer["Health"] + points
+  end
+end

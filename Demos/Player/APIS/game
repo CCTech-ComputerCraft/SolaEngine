@@ -1,0 +1,16 @@
+exitKey = keys.q
+
+function exit()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(colors.black)
+  term.setTextColor(colors.white)
+  term.clear()
+  error()
+end
+
+function checkExit()
+  local event, key = os.pullEvent("key")
+  if key == exitKey then
+    exit()
+  end
+end

@@ -1,0 +1,22 @@
+collisions = {}
+collisionsInt = {}
+collisionsNum = 0
+
+function new(name, x, y)
+  collisionsNum = collisionsNum + 1
+
+  collisions[collisionsNum] = {
+    colNumber = collisionsNum;
+    colName = name;
+    XPos = x;
+    YPos = y
+  }
+end
+
+function kill(name)
+  for _, collision in ipairs(collisions) do
+    if collision.colName == name then
+      table.remove(collisions, collision.colNumber)
+    end
+  end
+end

@@ -1,0 +1,89 @@
+--[[
+  SolaEngine,
+  Made with <3 by CCTech
+]]--
+
+local oldPull = os.pullEvent
+os.pullEvent = os.pullEventRaw
+
+
+ -- Load Config file
+
+os.loadAPI("/SolaEngine/Engine/Config")
+
+-- Load APIS for Game Creating
+
+os.loadAPI("/SolaEngine/APIS/collisions")
+os.loadAPI("/SolaEngine/APIS/game")
+os.loadAPI("/SolaEngine/APIS/player")
+
+-- Variables
+
+running = true
+
+-- Functions
+
+function draw()
+  term.setBackgroundColor(colors.gray)
+  term.clear()
+  term.setBackgroundColor(colors.red)
+  term.setTextColor(colors.white)
+  term.setCursorPos(1,1)
+  print("X")
+  term.setCursorPos(4,5)
+  term.setTextColor(colors.white)
+  term.setBackgroundColor(colors.gray)
+  print("Choose a Project to start building!")
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.black)
+  term.setCursorPos(4,7)
+  print("                                   ")
+end
+
+function runTime()
+  while running do
+    local event, button, x, y = os.pullEvent("mouse_click")
+    if button == 1 and x == 1 and y == 1 then
+      file = fs.open("/SolaEngine/Engine/Config", "w")
+      file.write(" ")
+      file.write(" ")
+      file.close()
+      os.unloadAPI("/SolaEngine/APIS/collisions")
+      os.unloadAPI("/SolaEngine/APIS/game")
+      os.unloadAPI("/SolaEngine/APIS/player")
+      running = false
+      term.setBackgroundColor(colors.black)
+      term.setTextColor(colors.white)
+      term.clear()
+      term.setCursorPos(1,1)
+    elseif button == 1 and x >= 4 and x <= 35 and y == 7 then
+      term.setCursorPos(4,7)
+      term.setBackgroundColor(colors.white)
+      term.setTextColor(colors.black)
+      input = read()
+
+      if not fs.exists("/SolaEngine/projects/"..input) then
+        fs.makeDir("/SolaEngine/projects/"..input)
+      end
+
+      local file = fs.open("/SolaEngine/Engine/Config", "w")
+      file.writeLine('CurrentProject = "/SolaEngine/projects/'..input..'"')
+      file.writeLine('ProjectName = "'..input..'"')
+      file.close()
+      running = false
+      shell.run("/SolaEngine/Engine/Editors/ComponentEditor")
+    end
+  end
+end
+
+function init()
+  draw()
+  runTime()
+end
+-- Main
+
+init()
+
+-- EOF (End Of File)
+
+os.pullEvent = oldPull

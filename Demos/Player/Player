@@ -1,0 +1,31 @@
+--[[
+
+  This is a demo for the player API
+
+  The player API has following functions:
+    - player.spawn(pathToSprite, x, y)
+    - player.setPos(x, y)
+    - player.control(UpKey, LeftKey, DownKey, RightKey, AllowUp, AllowLeft, AllowDown, AllowRight)
+    - player.Movement()
+    - player.kill()
+    - player.heal(points)
+    - player.setHealth(points)
+    - player.damage(points)
+
+    The "Allow..." in "player.control" are booleans which allow the player to move up/down/left/right
+    "player.Movement()" handles the Players Movement
+
+    The Player API Also has a table where you can access and edit the Player:
+      - player.CurrentPlayer["Sprite"]
+      - player.CurrentPlayer["Health"]
+      - player.CurrentPlayer["XPos"]
+      - player.CurrentPlayer["YPos"]
+]]--
+
+local dir = shell.getRunningProgram()
+local path = fs.getDir(dir)
+
+os.loadAPI(path.."/APIS/collisions")
+os.loadAPI(path.."/APIS/game")
+os.loadAPI(path.."/APIS/player")
+shell.run(path.."/game/Scripts/main.script")

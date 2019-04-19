@@ -1,0 +1,42 @@
+local dir = shell.getRunningProgram()
+local path = fs.getDir(dir)
+local running = true
+
+function draw()
+  term.setBackgroundColor(colors.black)
+  term.clear()
+  term.setTextColor(colors.white)
+  term.setCursorPos(1,1)
+  print("Health: ".. player.CurrentPlayer["Health"])
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(4,4)
+  print(" ")
+end
+
+player.WalkSpeed = 2
+
+player.setHealth(10)
+
+collisions.new("Col1", 1,1)
+collisions.new("Col1.2", 2,1)
+collisions.new("Col1.3", 3,1)
+collisions.new("Col1.4", 4,1)
+collisions.new("Col1.5", 5,1)
+collisions.new("Col1.6", 6,1)
+collisions.new("Col1.7", 7,1)
+collisions.new("Col1.8", 8,1)
+collisions.new("Col1.9", 9,1)
+collisions.new("Col1.10", 10,1)
+draw()
+
+player.spawn(path.."/../Sprites/Player.sprite", 1,2)
+
+while running do
+  player.control(keys.w, keys.a, keys.s, keys.d, true, true, true, true)
+  draw()
+  player.Movement()
+
+  if player.CurrentPlayer["XPos"] == 4 and player.CurrentPlayer["YPos"] == 4 then
+    player.damage(1)
+  end
+end

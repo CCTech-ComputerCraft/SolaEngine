@@ -1,0 +1,17 @@
+--[[
+
+  The collisions API allows you to create Walls where the Player cannot walk through:
+    - collisions.new(StringName, x, y)
+    - collisions.kill(StringName)
+
+  "collisions.kill(StringName)" breaks the collision with the name you entered
+  as String in "StringName"
+]]--
+
+local dir = shell.getRunningProgram()
+local path = fs.getDir(dir)
+
+os.loadAPI(path.."/APIS/collisions")
+os.loadAPI(path.."/APIS/game")
+os.loadAPI(path.."/APIS/player")
+shell.run(path.."/game/scripts/main.script")

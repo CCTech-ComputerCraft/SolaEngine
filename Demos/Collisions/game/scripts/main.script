@@ -1,0 +1,39 @@
+--[[
+
+  This is a small Demo of the collisions API
+
+  The collisions API Allows you to create collisions using:
+
+  "collisions.new(StringName, posX, posY)"
+
+  Also you can remove collisions using:
+
+  "collisions.kill(StringName)"
+
+]]--
+
+local dir = shell.getRunningProgram()
+local path = fs.getDir(dir)
+local BlockTex = paintutils.loadImage(path.."/../Sprites/Block.sprite")
+local running = true
+
+function draw()
+  term.setBackgroundColor(colors.black)
+  term.setCursorPos(1,1)
+  term.clear()
+  paintutils.drawImage(BlockTex, 3, 3)
+  paintutils.drawImage(BlockTex, 5, 5)
+end
+
+collisions.new("Col1", 3, 3)
+collisions.new("Col1.1", 2, 3)
+collisions.new("Col1.2", 3, 2)
+collisions.new("Col1.3", 2, 2)
+draw()
+player.spawn(path.."/../Sprites/Player.sprite", 1, 1)
+
+while running do
+  player.control(keys.w, keys.a, keys.s, keys.d, true, true, true, true)
+  draw()
+  player.Movement()
+end
